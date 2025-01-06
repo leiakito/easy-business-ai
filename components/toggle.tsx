@@ -20,7 +20,7 @@ export default function ToggleTheme() {
   }
 
   return (
-    <Button variant="ghost" onClick={toggleTheme}>
+    <Button variant="link" size="sm" onClick={toggleTheme}>
       {theme === 'light' ? 'Dark' : 'Light'}
     </Button>
   )

@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation'
 import { newChat } from '@/actions/chat'
 import { generateRandomId } from '@/lib/utils'
 
-function NegativeChat({ className }: { className?: string }) {
+import { Button } from './ui/button'
+
+function NegativeChat() {
   const router = useRouter()
   function toChat() {
     const chatId = generateRandomId(24)
@@ -13,9 +15,9 @@ function NegativeChat({ className }: { className?: string }) {
     newChat(chatId)
   }
   return (
-    <div onClick={toChat} className={className}>
+    <Button onClick={toChat} variant="link" size="sm">
       <span>New chat</span>
-    </div>
+    </Button>
   )
 }
 

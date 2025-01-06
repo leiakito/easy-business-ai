@@ -1,18 +1,12 @@
 import { Menu } from 'lucide-react'
-import Link from 'next/link'
 
 import { NamedLogoWithLink } from './logo'
+import NegativePricing from './nagative-pricing'
 import NegativeChat from './negative-chat'
 import { ProfileButton } from './profile'
+import SignOut from './sign-out'
 import ToggleTheme from './toggle'
-import { buttonVariants } from './ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
-
-const btnVariant = buttonVariants({
-  variant: 'link',
-  className: 'text-base flex flex-row items-center cursor-pointer',
-  size: 'sm'
-})
 
 export default function Navbar({ children }: { children?: React.ReactNode }) {
   return (
@@ -25,15 +19,16 @@ export default function Navbar({ children }: { children?: React.ReactNode }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="flex flex-col">
             <DropdownMenuItem asChild>
-              <NegativeChat className={btnVariant} />
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/pricing" className={btnVariant}>
-                <span>Pricing</span>
-              </Link>
+              <NegativeChat />
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <ProfileButton />
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <NegativePricing />
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <SignOut />
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <ToggleTheme />
