@@ -1,10 +1,10 @@
 import { redirect } from 'next/navigation'
 
 import GoogleLogin from '@/components/google-login'
-import { getUser } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 
 export default async function Login() {
-  const session = await getUser()
+  const session = await auth()
   if (session?.user) redirect('/')
   return (
     <div className="flex h-[70vh] flex-col items-center justify-center gap-5">

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { getUser } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 
 import Subscriptions from './subscriptions'
 import { Button, buttonVariants } from './ui/button'
@@ -22,7 +22,7 @@ export function ProfileButton() {
 }
 
 async function ProfileContent() {
-  const session = await getUser()
+  const session = await auth()
 
   if (!session?.user) {
     return (

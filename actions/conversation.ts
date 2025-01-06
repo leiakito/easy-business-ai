@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { getUser } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 import prisma from '@/prisma/client'
 
 export async function deleteConversation(id: string) {
@@ -13,7 +13,7 @@ export async function deleteConversation(id: string) {
 }
 
 export async function getConversations() {
-  const session = await getUser()
+  const session = await auth()
   if (!session?.user) return null
   const userId = session.user.id
 

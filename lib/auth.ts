@@ -1,6 +1,5 @@
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import { Subscription } from '@prisma/client'
-import { AuthOptions, DefaultSession, getServerSession } from 'next-auth'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
 import { AUTH_SECRET, GOOGLE_ID, GOOGLE_SECRET } from '@/constant/config'
@@ -8,24 +7,7 @@ import { FreePlan } from '@/constant/plan'
 
 import prisma from '../prisma/client'
 
-
-
-declare module 'next-auth' {
-  interface Session extends DefaultSession {
-    user: {
-      id: string
-      subscriptions: Subscription[]
-    } & DefaultSession['user']
-  }
-}
-
-declare module 'next-auth/jwt' {
-  interface JWT {
-    id: string
-  }
-}
-
-export const authConfig: AuthOptions = {
+export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: AUTH_SECRET,
   providers: [
     GoogleProvider({
@@ -42,6 +24,9 @@ export const authConfig: AuthOptions = {
       const db_user = await prisma.user.findFirst({
         where: {
           email: token.email
+        },
+        include: {
+          subscriptions: true
         }
       })
       if (trigger === 'signUp' && token.email) {
@@ -54,33 +39,26 @@ export const authConfig: AuthOptions = {
           }
         })
       }
-      if (db_user) token.id = db_user.id
+      if (db_user) {
+        token.id = db_user.id
+        token.subscriptions = db_user.subscriptions
+      }
       return token
     },
-    session: async ({ token, session }) => {
-      const user = await prisma.user.findUnique({
-        where: {
-          id: token.id
-        },
-        include: {
-          subscriptions: true
+    session: ({ session, token }) => {
+      if (token && session.user) {
+        session.user = {
+          ...session.user,
+          // @ts-expect-error: has id
+          id: token.id,
+          name: token.name,
+          email: token.email,
+          image: token.picture,
+          subscriptions: token.subscriptions as any
         }
-      })
-      if (user) {
-        session.user = user
-        return session
       }
-      if (token) {
-        session.user.id = token.id
-        session.user.name = token.name
-        session.user.email = token.email
-        session.user.image = token.picture
-      }
+
       return session
     }
   }
-}
-
-export async function getUser() {
-  return await getServerSession(authConfig)
-}
+})

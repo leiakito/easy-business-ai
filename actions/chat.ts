@@ -5,12 +5,12 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { OPEN_ROUTER_API_KEY } from '@/constant/config'
-import { getUser } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 import prisma from '@/prisma/client'
 import { ChatSettings } from '@/store/chat.store'
 
 export async function checkUserTokenLimit(): Promise<boolean> {
-  const session = await getUser()
+  const session = await auth()
   if (!session?.user) redirect('/login')
 
   const activeSubscription = await prisma.subscription.findFirst({
@@ -37,7 +37,7 @@ export async function checkUserTokenLimit(): Promise<boolean> {
 }
 
 export async function updateUserTokenUsage(tokensUsed: number) {
-  const session = await getUser()
+  const session = await auth()
   if (!session?.user) redirect('/login')
 
   const activeSubscription = await prisma.subscription.findFirst({
@@ -78,7 +78,7 @@ export async function updateUserTokenUsage(tokensUsed: number) {
 }
 
 export async function newChat(id: string) {
-  const session = await getUser()
+  const session = await auth()
   if (!session?.user) redirect('/login')
 
   await prisma.conversation.create({
@@ -92,7 +92,7 @@ export async function newChat(id: string) {
 export async function createMessage(
   data: Omit<Prisma.MessageCreateInput, 'conversation'> & { conversationId: string }
 ) {
-  const session = await getUser()
+  const session = await auth()
   if (!session?.user) redirect('/login')
 
   const { conversationId, ...messageData } = data

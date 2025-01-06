@@ -2,14 +2,14 @@
 
 ## Project Overview
 
-This is a modern chat application built with Next.js 14, leveraging cutting-edge features like React Server Components (RSC), Server Actions, useFormStatus, and useOptimistic. The project showcases a robust tech stack including Shadcn-ui for styling, Prisma for database operations, NextAuth for authentication, OpenAI for AI-powered features, and Postgres as the database.
+This is a modern chat application built with Next.js 15, leveraging cutting-edge features like React Server Components (RSC), Server Actions, useFormStatus, and useOptimistic. The project showcases a robust tech stack including Shadcn-ui for styling, Prisma for database operations, NextAuth for authentication, OpenAI for AI-powered features, and Postgres as the database.
 
 ## Features
 
 - Real-time chat functionality
 - Dark and light theme support
 - User authentication with NextAuth
-- AI-powered responses using OpenAI
+- AI-powered responses using OpenRouter
 - Responsive design for various screen sizes
 
 ## Tech Stack
