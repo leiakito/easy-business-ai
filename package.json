@@ -1,7 +1,23 @@
 {
   "name": "link-ai",
   "version": "0.1.0",
-  "private": true,
+  "author": "felix",
+  "description": "A modern chat application built with Next.js 15, featuring real-time chat, AI-powered responses, and user authentication",
+  "keywords": [
+    "easy",
+    "template",
+    "next.js",
+    "react",
+    "chat",
+    "ai",
+    "openai",
+    "openrouter",
+    "prisma",
+    "nextauth",
+    "typescript"
+  ],
+  "homepage": "https://linkai.website",
+  "private": false,
   "scripts": {
     "dev": "next dev",
     "db:push": "prisma db push",
