@@ -3,6 +3,17 @@
   "version": "0.1.0",
   "author": "felix",
   "description": "A minimal and cutting-edge AI project template for validating business ideas",
+  "topics": [
+    "ai",
+    "nextjs",
+    "react",
+    "openai",
+    "prisma",
+    "typescript",
+    "business-validation",
+    "chat-application",
+    "template"
+  ],
   "keywords": [
     "easy",
     "template",
