@@ -1,5 +1,6 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import NextAuth from 'next-auth'
+import { Subscription } from '@prisma/client'
+import NextAuth, { DefaultSession } from 'next-auth'
 import GitHub from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 import ResendProvider from 'next-auth/providers/resend'
@@ -7,6 +8,15 @@ import ResendProvider from 'next-auth/providers/resend'
 import { FreePlan } from '@/constant/plan'
 
 import prisma from '../prisma/client'
+
+declare module 'next-auth' {
+  interface Session extends DefaultSession {
+    user: {
+      id: string
+      subscriptions: Subscription[]
+    } & DefaultSession['user']
+  }
+}
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   providers: [
