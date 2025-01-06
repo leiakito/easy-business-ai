@@ -1,19 +1,20 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import NextAuth from 'next-auth'
+import GitHub from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
+import ResendProvider from 'next-auth/providers/resend'
 
-import { AUTH_SECRET, GOOGLE_ID, GOOGLE_SECRET } from '@/constant/config'
 import { FreePlan } from '@/constant/plan'
 
 import prisma from '../prisma/client'
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  secret: AUTH_SECRET,
   providers: [
-    GoogleProvider({
-      clientId: GOOGLE_ID,
-      clientSecret: GOOGLE_SECRET
-    })
+    GoogleProvider,
+    ResendProvider({
+      from: 'no-reply@linkai.website'
+    }),
+    GitHub
   ],
   adapter: PrismaAdapter(prisma),
   session: {
@@ -50,9 +51,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user = {
           ...session.user,
           // @ts-expect-error: has id
-          id: token.id,
+          id: token.id!,
           name: token.name,
-          email: token.email,
+          email: token.email ?? '',
           image: token.picture,
           subscriptions: token.subscriptions as any
         }

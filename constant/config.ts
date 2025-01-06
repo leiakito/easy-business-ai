@@ -11,8 +11,5 @@ export const PRICING_CONSTANTS = {
 }
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!
-export const AUTH_SECRET = process.env.NEXTAUTH_SECRET!
 export const OPEN_ROUTER_API_KEY = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY!
-export const GOOGLE_ID = process.env.GOOGLE_ID!
-export const GOOGLE_SECRET = process.env.GOOGLE_SECRET!
 export const RANDOM_ID_CHARACTERS = process.env.NEXT_PUBLIC_RANDOM_ID_CHARACTERS!

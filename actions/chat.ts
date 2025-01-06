@@ -84,7 +84,7 @@ export async function newChat(id: string) {
   await prisma.conversation.create({
     data: {
       id,
-      userId: session.user.id
+      userId: session.user.id!
     }
   })
 }
