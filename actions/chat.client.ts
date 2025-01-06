@@ -101,34 +101,54 @@ export const useChat = (conversationId: string) => {
       scrollToBottom()
     }, 200)
 
-    for await (const textPart of response.textStream) {
-      str += textPart
-      requestAnimationFrame(() => {
-        appendMessage(
-          {
-            id: assistantId,
-            role: 'assistant',
-            content: textPart
-          },
-          conversationId,
-          assistantId
-        )
+    try {
+      for await (const textPart of response.textStream) {
+        str += textPart
+        requestAnimationFrame(() => {
+          appendMessage(
+            {
+              id: assistantId,
+              role: 'assistant',
+              content: textPart
+            },
+            conversationId,
+            assistantId
+          )
+        })
+      }
+
+      const usage = await response.usage
+
+      const assistantTokenCount = usage.completionTokens
+
+      createMessage({
+        id: assistantId,
+        conversationId: conversationId,
+        role: 'assistant',
+        content: str,
+        tokenCount: assistantTokenCount
       })
+
+      updateUserTokenUsage(usage.totalTokens)
+    } catch (error) {
+      console.error('Error in createCompletion:', error)
+      toast({
+        title: 'Error occurred',
+        description: 'An error occurred while processing your request. Please try switching to another model.',
+        variant: 'destructive'
+      })
+
+      // Remove the incomplete assistant message
+      appendMessage(
+        {
+          id: assistantId,
+          role: 'assistant',
+          content: 'An error occurred. Please try again or switch to another model.'
+        },
+        conversationId,
+        assistantId
+      )
     }
-
-    const usage = await response.usage
-
-    const assistantTokenCount = usage.completionTokens
-
-    createMessage({
-      id: assistantId,
-      conversationId: conversationId,
-      role: 'assistant',
-      content: str,
-      tokenCount: assistantTokenCount
-    })
-
-    updateUserTokenUsage(usage.totalTokens)
   }
 
   return {

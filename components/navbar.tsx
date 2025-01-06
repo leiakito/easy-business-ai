@@ -1,8 +1,7 @@
 import { Menu } from 'lucide-react'
 
 import { NamedLogoWithLink } from './logo'
-import NegativePricing from './nagative-pricing'
-import NegativeChat from './negative-chat'
+import { NegativeChat, NegativeHome, NegativePricing } from './nagative.client'
 import { ProfileButton } from './profile'
 import SignOut from './sign-out'
 import ToggleTheme from './toggle'
@@ -28,10 +27,13 @@ export default function Navbar({ children }: { children?: React.ReactNode }) {
               <NegativePricing />
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <SignOut />
+              <NegativeHome />
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <ToggleTheme />
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <SignOut />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
