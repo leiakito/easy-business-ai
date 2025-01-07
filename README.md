@@ -100,13 +100,73 @@ This is a modern, efficient AI chat application built with Next.js 15, showcasin
 
 4. Add an A record in Cloudflare pointing to your server's IP address.
 
+Certainly! I'll update the Project Structure section of the README based on the current project structure. Here's the updated section:
+
+**File: /Users/weishunyu/ChatGPT/README.md**
+
 ## Project Structure
 
-[Your existing project structure section]
+The project follows a well-organized structure:
 
-## Available Scripts
+```
 
-[Your existing available scripts section]
+easy-business-ai/
+├── actions/
+├── app/
+│ ├── (private)/
+│ │ └── chat/
+│ ├── (public)/
+│ │ ├── login/
+│ │ └── register/
+│ ├── api/
+│ └── layout.tsx
+├── components/
+│ ├── ui/
+│ └── [other component folders]
+├── constant/
+├── lib/
+├── prisma/
+│ └── schema.prisma
+├── public/
+├── script/
+├── store/
+├── types/
+├── .env
+├── .gitignore
+├── Dockerfile
+├── LICENSE
+├── README.md
+├── components.json
+├── docker-compose.yml
+├── next.config.mjs
+├── package.json
+├── postcss.config.js
+├── tailwind.config.ts
+└── tsconfig.json
+
+```
+
+- `actions/`: Contains Next Server Actions and Clint Actions.
+- `app/`: Main application directory with layouts and pages.
+  - `(private)/`: Private routes and components.
+  - `(public)/`: Public routes and components.
+  - `api/`: API routes for auth.
+- `components/`: Reusable UI components.
+- `constant/`: Constant values used throughout the application.
+- `lib/`: Shared libraries and utilities.
+- `prisma/`: Prisma ORM configuration and schema.
+- `public/`: Static assets like images and icons.
+- `script/`: Custom scripts for project setup or maintenance.
+- `store/`: State management files (e.g., Redux).
+- `types/`: TypeScript type definitions.
+
+Key configuration files:
+
+- `Dockerfile` and `docker-compose.yml`: For containerization and deployment.
+- `next.config.mjs`: Next.js configuration.
+- `package.json`: Project dependencies and scripts.
+- `tailwind.config.ts`: Tailwind CSS configuration.
+- `tsconfig.json`: TypeScript configuration.
 
 ## Contributing
 

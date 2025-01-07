@@ -8,15 +8,13 @@ export default async function ChatLayout(props: { children: React.ReactNode; par
   const { id } = await props.params
 
   return (
-    <main className="flex-grow px-5 sm:px-10">
+    <main className="flex flex-grow flex-col px-5 sm:px-10">
       <ChatClientFetch />
       <Navbar>
         <ChatMenu id={id} />
       </Navbar>
 
-      <div className="flex w-full flex-col items-start gap-4 sm:flex-row sm:gap-12">
-        <div className="w-full">{props.children}</div>
-      </div>
+      {props.children}
     </main>
   )
 }
