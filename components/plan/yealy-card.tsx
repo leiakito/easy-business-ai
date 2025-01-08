@@ -26,7 +26,7 @@ export function YearlyPlanComponent({
 }: YearlyPlanComponentProps) {
   return (
     <div
-      className={`w-full max-w-sm border ${popular ? 'border-accent' : 'border-border'} overflow-hidden rounded-lg bg-card`}
+      className={`flex w-full max-w-sm flex-col justify-between border ${popular ? 'border-accent' : 'border-border'} overflow-hidden rounded-lg bg-card`}
     >
       <div className="p-6">
         <h3 className="mb-2 text-2xl font-bold text-card-foreground">{title}</h3>

@@ -18,11 +18,8 @@ function Pricing() {
             totalPrice="$58.88"
             features={[
               '3M tokens ≈ 2000 messages per month',
-              'Access Premium Roleplay Models',
-              'Discount on premium models CraveU',
               'Memory Size (Up to 16K)',
-              'Adjustable Response Length (Up to 1K)',
-              'User Personas - Up to 10'
+              'Adjustable Response Length (Up to 1K)'
             ]}
             discount="20%"
             ctaText="Choose Essential"
@@ -35,11 +32,9 @@ function Pricing() {
             totalPrice="$94.88"
             features={[
               '10M tokens ≈ 6000 messages per month',
-              'Access Premium Roleplay Models',
-              '8% Off Premium Models (Sapphire, Amethyst, Tanzanite)',
+              '8% Off Premium Models',
               'Memory Size (Up to 16K)',
-              'Adjustable Response Length (Up to 1K)',
-              'User Personas - Up to 50'
+              'Adjustable Response Length (Up to 1K)'
             ]}
             discount="50%"
             ctaText="Choose Pro"
@@ -52,11 +47,9 @@ function Pricing() {
             totalPrice="$358.88"
             features={[
               '40M tokens ≈ 24000 messages per month',
-              'Access Premium Roleplay Models',
-              '15% Off Premium Models (Sapphire, Amethyst, Tanzanite)',
+              '15% Off Premium Models',
               'Memory Size (Up to 16K)',
-              'Adjustable Response Length (Up to 1K)',
-              'User Personas - Up to 100'
+              'Adjustable Response Length (Up to 1K)'
             ]}
             discount="$240"
             popular={true}
@@ -70,11 +63,8 @@ function Pricing() {
             price="$5.99"
             features={[
               '3M tokens ≈ 2000 messages per month',
-              'Access Premium Roleplay Models',
-              'Discount on premium models CraveU',
               'Memory Size (Up to 16K)',
-              'Adjustable Response Length (Up to 1K)',
-              'User Personas - Up to 10'
+              'Adjustable Response Length (Up to 1K)'
             ]}
             popular={true}
             ctaText="Choose Essential"
@@ -85,11 +75,9 @@ function Pricing() {
             price="$14.99"
             features={[
               '10M tokens ≈ 6000 messages per month',
-              'Access Premium Roleplay Models',
-              '8% Off Premium Models (Sapphire, Amethyst, Tanzanite)',
+              '8% Off Premium Models',
               'Memory Size (Up to 16K)',
-              'Adjustable Response Length (Up to 1K)',
-              'User Personas - Up to 50'
+              'Adjustable Response Length (Up to 1K)'
             ]}
             ctaText="Choose Pro"
           />
@@ -99,11 +87,9 @@ function Pricing() {
             price="$49.99"
             features={[
               '40M tokens ≈ 24000 messages per month',
-              'Access Premium Roleplay Models',
-              '15% Off Premium Models (Sapphire, Amethyst, Tanzanite)',
+              '15% Off Premium Models',
               'Memory Size (Up to 16K)',
-              'Adjustable Response Length (Up to 1K)',
-              'User Personas - Up to 100'
+              'Adjustable Response Length (Up to 1K)'
             ]}
             ctaText="Choose Ultimate"
           />
@@ -113,19 +99,19 @@ function Pricing() {
       <h1 className="mb-8 text-3xl font-bold text-foreground">Flow Tokens</h1>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         <TokenPackage
-          title="300K CraveU Tokens"
+          title="300K Tokens"
           products={PRICING_CONSTANTS.TOKEN_PACKAGE_300K_ID}
           description="200 messages"
           price="$1.99"
         />
         <TokenPackage
-          title="1M CraveU Tokens"
+          title="1M Tokens"
           products={PRICING_CONSTANTS.TOKEN_PACKAGE_1M_ID}
           description="600 messages"
           price="$3.99"
         />
         <TokenPackage
-          title="2M CraveU Tokens"
+          title="2M Tokens"
           products={PRICING_CONSTANTS.TOKEN_PACKAGE_2M_ID}
           description="1200 messages"
           price="$4.99"

@@ -17,7 +17,7 @@ export default function RefundPolicyPage() {
       <section className="mb-8">
         <h2 className="mb-4 text-2xl font-semibold">Consequences of Chargebacks</h2>
         <p>
-          Should You do so, AI Router may, in its sole discretion, refuse to honor pending and future transactions or
+          Should You do so, LinkAI may, in its sole discretion, refuse to honor pending and future transactions or
           entries made from all credit card accounts or online accounts on which such chargebacks have been made and may
           prohibit all persons or businesses in whose name the credit card accounts exist and any person or business who
           accesses any associated online account or credit card or who otherwise breaches this provision from using the

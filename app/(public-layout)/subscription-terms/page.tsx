@@ -6,27 +6,74 @@ export default function SubscriptionTerms() {
       <section className="mb-8">
         <h2 className="mb-4 text-2xl font-semibold">Description of Membership Services</h2>
 
-        <h3 className="mb-2 mt-4 text-xl font-semibold">Free Plan:</h3>
+        <h3 className="mb-2 mt-4 text-xl font-semibold">Essential Plan:</h3>
         <p>
-          Monthly: 100 messages per month, memory deleted after 7 days of inactivity, shared chat capacity which may be
-          unavailable during peak times.
+          Monthly: <strong className="text-primary">$5.99</strong> per month for:
         </p>
-        <p>Annually: Same as monthly.</p>
-
-        <h3 className="mb-2 mt-4 text-xl font-semibold">Standard Plan:</h3>
-        <p>Monthly: $5.99 per month for 2000 messages, limited memory, dedicated chat capacity with basic priority.</p>
-        <p>Annually: $58.88 per year, equivalent to $4.91 per month, same benefits as the monthly plan.</p>
-
-        <h3 className="mb-2 mt-4 text-xl font-semibold">Premium Plan (Most Popular):</h3>
-        <p>Monthly: $14.99 per month for 6000 messages, good memory, dedicated chat capacity with basic priority.</p>
-        <p>Annually: $94.88 per year, equivalent to $7.91 per month, same benefits as the monthly plan.</p>
-
-        <h3 className="mb-2 mt-4 text-xl font-semibold">Deluxe Plan:</h3>
+        <ul className="list-inside list-disc">
+          <li>
+            <span>3M tokens (approximately 2000 messages per month)</span>
+          </li>
+          <li>
+            <span>Memory Size (Up to 16K)</span>
+          </li>
+          <li>
+            <span>Adjustable Response Length (Up to 1K)</span>
+          </li>
+        </ul>
         <p>
-          Monthly: $49.90 per month for unlimited messages, maximum memory, dedicated chat capacity with basic priority,
-          options to adjust memory size and AI message lengths, and enhance immersion mode.
+          Annually: <strong className="text-primary">$58.88</strong> per year (
+          <strong className="text-primary">$4.99</strong> per month), same benefits as the monthly plan with a{' '}
+          <span>20% discount</span>.
         </p>
-        <p>Annually: $358.80 per year, equivalent to $29.90 per month, same benefits as the monthly plan.</p>
+
+        <h3 className="mb-2 mt-4 text-xl font-semibold">Pro Plan:</h3>
+        <p>
+          Monthly: <strong className="text-primary">$14.99</strong> per month for:
+        </p>
+        <ul className="list-inside list-disc">
+          <li>
+            <span>10M tokens (approximately 6000 messages per month)</span>
+          </li>
+          <li>
+            <span>8% Off Premium Models</span>
+          </li>
+          <li>
+            <span>Memory Size (Up to 16K)</span>
+          </li>
+          <li>
+            <span>Adjustable Response Length (Up to 1K)</span>
+          </li>
+        </ul>
+        <p>
+          Annually: <strong className="text-primary">$94.88</strong> per year (
+          <strong className="text-primary">$7.99</strong> per month), same benefits as the monthly plan with a{' '}
+          <span>50% discount</span>.
+        </p>
+
+        <h3 className="mb-2 mt-4 text-xl font-semibold">Ultimate Plan:</h3>
+        <p>
+          Monthly: <strong className="text-primary">$49.99</strong> per month for:
+        </p>
+        <ul className="list-inside list-disc">
+          <li>
+            <span>40M tokens (approximately 24000 messages per month)</span>
+          </li>
+          <li>
+            <span>15% Off Premium Models</span>
+          </li>
+          <li>
+            <span>Memory Size (Up to 16K)</span>
+          </li>
+          <li>
+            <span>Adjustable Response Length (Up to 1K)</span>
+          </li>
+        </ul>
+        <p>
+          Annually: <strong className="text-primary">$358.88</strong> per year (
+          <strong className="text-primary">$29.99</strong> per month), same benefits as the monthly plan with a{' '}
+          <span>$240 discount</span>.
+        </p>
       </section>
 
       <section className="mb-8">
@@ -34,31 +81,63 @@ export default function SubscriptionTerms() {
 
         <h3 className="mb-2 mt-4 text-xl font-semibold">Monthly Subscription:</h3>
         <ul className="list-inside list-disc">
-          <li>Free Plan: $0</li>
-          <li>Standard Plan: $5.99</li>
-          <li>Premium Plan: $14.99</li>
-          <li>Deluxe Plan: $49.90</li>
+          <li>
+            Essential Plan: <strong className="text-primary">$5.99</strong>
+          </li>
+          <li>
+            Pro Plan: <strong className="text-primary">$14.99</strong>
+          </li>
+          <li>
+            Ultimate Plan: <strong className="text-primary">$49.99</strong>
+          </li>
         </ul>
 
         <h3 className="mb-2 mt-4 text-xl font-semibold">Annual Subscription:</h3>
         <ul className="list-inside list-disc">
-          <li>Free Plan: $0</li>
-          <li>Standard Plan: $58.88</li>
-          <li>Premium Plan: $94.88</li>
-          <li>Deluxe Plan: $358.80</li>
+          <li>
+            Essential Plan: <strong className="text-primary">$58.88</strong> (equivalent to{' '}
+            <strong className="text-primary">$4.99</strong> per month)
+          </li>
+          <li>
+            Pro Plan: <strong className="text-primary">$94.88</strong> (equivalent to{' '}
+            <strong className="text-primary">$7.99</strong> per month)
+          </li>
+          <li>
+            Ultimate Plan: <strong className="text-primary">$358.88</strong> (equivalent to{' '}
+            <strong className="text-primary">$29.99</strong> per month)
+          </li>
+        </ul>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="mb-4 text-2xl font-semibold">Flow Tokens</h2>
+        <p>In addition to our subscription plans, we offer the following token packages:</p>
+        <ul className="list-inside list-disc">
+          <li>
+            <span>300K Tokens</span> (approximately 200 messages): <strong className="text-primary">$1.99</strong>
+          </li>
+          <li>
+            <span>1M Tokens</span> (approximately 600 messages): <strong className="text-primary">$3.99</strong>
+          </li>
+          <li>
+            <span>2M Tokens</span> (approximately 1200 messages): <strong className="text-primary">$4.99</strong>
+          </li>
         </ul>
       </section>
 
       <section className="mb-8">
         <h2 className="mb-4 text-2xl font-semibold">Method to Cancel Automatic Renewal</h2>
-        <p>To Cancel your subscription and prevent future Automatic renewals, please follow these simple steps:</p>
+        <p>To cancel your subscription and prevent future automatic renewals, please follow these simple steps:</p>
         <ol className="mt-2 list-inside list-decimal">
-          <li>Go to your account settings.</li>
-          <li>{`Click on the "Subscriptions" tab.`}</li>
-          <li>{`Find your current subscription plan and click on "Manage Subscription."`}</li>
-          <li>{`Select "Cancel Subscription."`}</li>
-          <li>{`Confirm your cancellation by selecting "Yes, Cancel Subscription."`}</li>
+          <li>Click the menu button in the top right corner, then select "My Account" from the dropdown menu.</li>
+          <li>Find your current subscription plan and click on "Cancel Subscription."</li>
+          <li>Review the cancellation details and confirm by clicking "Yes, Cancel Subscription."</li>
+          <li>You will receive a confirmation message once the cancellation is complete.</li>
         </ol>
+        <p className="mt-4">
+          Note: After cancellation, you will continue to have access to your subscription benefits until the end of your
+          current billing period.
+        </p>
       </section>
 
       <section className="mb-8">
