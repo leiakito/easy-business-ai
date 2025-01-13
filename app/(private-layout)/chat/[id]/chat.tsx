@@ -1,6 +1,6 @@
 'use client'
 
-import { ElementRef, useRef } from 'react'
+import { useRef } from 'react'
 
 import { useChat } from '@/actions/chat.client'
 import Submit from '@/components/submit'
@@ -13,8 +13,8 @@ type ChatProps = {
 }
 
 export default function Chat({ id }: ChatProps) {
-  const scrollRef = useRef<ElementRef<'div'>>(null)
-  const sessions = useChatStore((state) => state.sessions)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const sessions = useChatStore((state) => state.sessionsMessages)
   const messages = sessions[id]?.messages
 
   const scrollToBottom = () => {
@@ -27,7 +27,7 @@ export default function Chat({ id }: ChatProps) {
     <div className="flex flex-grow flex-col md:px-20">
       <div
         ref={scrollRef}
-        className="scrollbar-hide flex h-0 flex-grow flex-col-reverse items-start gap-4 overflow-y-auto md:gap-8"
+        className="flex h-0 flex-grow flex-col-reverse items-start gap-4 overflow-y-auto scrollbar-hide md:gap-8"
       >
         <div className="flex-1" />
         {!messages?.length ? (
@@ -91,8 +91,8 @@ type ConversationComponent = {
 }
 
 function ChatInput({ id, scrollToBottom }: ConversationComponent) {
-  const inputRef = useRef<ElementRef<'textarea'>>(null)
-  const formRef = useRef<ElementRef<'form'>>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
   const { createCompletion } = useChat(id)
 

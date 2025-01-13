@@ -25,7 +25,8 @@ export type ChatSettings = {
 }
 
 const DEFAULT_STATE = {
-  sessions: {},
+  sessionsMessages: {},
+  sessionsChatSettings: {},
   models: [],
   isInitialized: false
 }
@@ -33,19 +34,21 @@ const DEFAULT_STATE = {
 export type ChatItem = {
   id: string
   content: string
-  role: 'system' | 'user' | 'assistant'
+  role: 'user' | 'assistant'
 }
 
 type Models = Array<{ id: string; name: string }>
 
 type ChatState = {
   models: Models
-  sessions: {
+  sessionsMessages: {
     [conversationId: string]: {
       messages: ChatItem[]
       lastMessageId?: string
-      chatSettings?: ChatSettings
     }
+  }
+  sessionsChatSettings: {
+    [conversationId: string]: ChatSettings
   }
   isInitialized: boolean
 }
@@ -58,7 +61,7 @@ type ChatStateActions = {
   initialize: () => void // New action to set isInitialized to true
 }
 
-const PERSISTED_KEYS: (keyof ChatState)[] = ['sessions', 'models', 'isInitialized']
+const PERSISTED_KEYS: (keyof ChatState)[] = ['sessionsMessages', 'sessionsChatSettings', 'models', 'isInitialized']
 
 export type chatProps = ChatState & ChatStateActions
 
@@ -78,15 +81,16 @@ export const useChatStore = create<chatProps>()(
       },
       addSession({ conversationId, messages }) {
         set((state) => {
-          state.sessions[conversationId] = {
-            ...state.sessions[conversationId],
+          state.sessionsMessages[conversationId] = {
+            ...state.sessionsMessages[conversationId],
             messages: messages ?? []
           }
+          state.sessionsChatSettings[conversationId] = DEFAULT_CHAT_SETTINGS
         })
       },
       appendMessage(chat, conversationId, lastMessageId) {
         set((state) => {
-          const session = state.sessions[conversationId]
+          const session = state.sessionsMessages[conversationId]
           const messageIndex = session.messages.findIndex((c) => c.id === chat.id)
 
           if (messageIndex !== -1) {
@@ -99,8 +103,8 @@ export const useChatStore = create<chatProps>()(
       },
       setChatSetting(chatSettings, conversationId) {
         set((state) => {
-          if (state.sessions[conversationId]) {
-            state.sessions[conversationId].chatSettings = chatSettings
+          if (state.sessionsChatSettings[conversationId]) {
+            state.sessionsChatSettings[conversationId] = chatSettings
           }
         })
       }

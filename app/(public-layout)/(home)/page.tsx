@@ -8,10 +8,12 @@ import { useSession } from 'next-auth/react'
 import { newChat } from '@/actions/chat'
 import { buttonVariants } from '@/components/ui/button'
 import { generateRandomId } from '@/lib/utils'
+import { useChatStore } from '@/store/chat.store'
 
 export default function Home() {
   const session = useSession()
   const router = useRouter()
+  const addSession = useChatStore((i) => i.addSession)
 
   const features = [
     { icon: <Code size={40} />, text: 'Advanced AI Programming' },
@@ -20,10 +22,19 @@ export default function Home() {
   ]
 
   function toChat() {
-    const chatId = generateRandomId(24)
-    const url = session.status === 'authenticated' ? `/chat/${chatId}` : '/login'
+    let url = ''
+    if (session.status === 'authenticated') {
+      const chatId = generateRandomId(24)
+      url = `/chat/${chatId}`
+      addSession({
+        conversationId: chatId,
+        messages: []
+      })
+      newChat(chatId)
+    } else {
+      url = '/login'
+    }
     router.push(url)
-    newChat(chatId)
   }
 
   return (

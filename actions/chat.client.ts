@@ -1,6 +1,7 @@
 'use client'
 
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
+import { MessageRole } from '@prisma/client'
 import { streamText } from 'ai'
 
 import { useToast } from '@/components/ui/use-toast'
@@ -12,14 +13,15 @@ import { checkUserTokenLimit, createMessage, updateUserTokenUsage } from './chat
 import { getConversationsWithMessages } from './conversation'
 
 export type Message = {
-  role: 'system' | 'user' | 'assistant'
+  role: 'assistant' | 'user'
   content: string
 }
 
 export const useChat = (conversationId: string) => {
   const appendMessage = useChatStore((i) => i.appendMessage)
   const addSession = useChatStore((i) => i.addSession)
-  const sessions = useChatStore((i) => i.sessions)
+  const sessions = useChatStore((i) => i.sessionsMessages)
+  const sessionsChatSettings = useChatStore((i) => i.sessionsChatSettings)
   const { toast } = useToast()
 
   async function createCompletion(message: string, scrollToBottom: () => void) {
@@ -33,7 +35,7 @@ export const useChat = (conversationId: string) => {
     }
     const useAssistantId = generateRandomId(24)
     const session = sessions[conversationId]
-    const chatSettings = session?.chatSettings ?? DEFAULT_CHAT_SETTINGS
+    const chatSettings = sessionsChatSettings[conversationId] ?? DEFAULT_CHAT_SETTINGS
 
     if (!session) {
       addSession({
@@ -41,7 +43,7 @@ export const useChat = (conversationId: string) => {
         messages: [
           {
             id: useAssistantId,
-            role: 'user',
+            role: MessageRole.user,
             content: message
           }
         ]
@@ -50,7 +52,7 @@ export const useChat = (conversationId: string) => {
       appendMessage(
         {
           id: useAssistantId,
-          role: 'user',
+          role: MessageRole.user,
           content: message
         },
         conversationId
@@ -59,7 +61,7 @@ export const useChat = (conversationId: string) => {
 
     createMessage({
       id: useAssistantId,
-      role: 'user',
+      role: MessageRole.user,
       content: message,
       tokenCount: 0,
       conversationId: conversationId
@@ -71,9 +73,9 @@ export const useChat = (conversationId: string) => {
       apiKey: OPEN_ROUTER_API_KEY
     })
 
-    const systemMessage = { role: 'system' as const, content: chatSettings.systemPrompt }
+    const systemMessage = { role: MessageRole.assistant, content: chatSettings.systemPrompt }
     const historyMessages = (session?.messages ?? []).map((i) => ({ ...i, role: i.role }))
-    const userMessage = { role: 'user' as const, content: message }
+    const userMessage = { role: MessageRole.user, content: message }
 
     const response = streamText({
       model: openrouter(chatSettings.model),
@@ -90,7 +92,7 @@ export const useChat = (conversationId: string) => {
     appendMessage(
       {
         id: assistantId,
-        role: 'assistant',
+        role: MessageRole.assistant,
         content: ''
       },
       conversationId
@@ -108,7 +110,7 @@ export const useChat = (conversationId: string) => {
           appendMessage(
             {
               id: assistantId,
-              role: 'assistant',
+              role: MessageRole.assistant,
               content: textPart
             },
             conversationId,
@@ -124,7 +126,7 @@ export const useChat = (conversationId: string) => {
       createMessage({
         id: assistantId,
         conversationId: conversationId,
-        role: 'assistant',
+        role: MessageRole.assistant,
         content: str,
         tokenCount: assistantTokenCount
       })
@@ -142,7 +144,7 @@ export const useChat = (conversationId: string) => {
       appendMessage(
         {
           id: assistantId,
-          role: 'assistant',
+          role: MessageRole.assistant,
           content: 'An error occurred. Please try again or switch to another model.'
         },
         conversationId,

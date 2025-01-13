@@ -96,6 +96,11 @@ enum SubscriptionStatus {
   CANCELLED
 }
 
+enum MessageRole {
+  user
+  assistant
+}
+
 
 model Conversation {
   id        String    @id @default(cuid())
@@ -110,7 +115,7 @@ model Conversation {
 
 model Message {
   id             String       @id @default(cuid())
-  role           String       
+  role           MessageRole       
   content        String
   tokenCount     Int
   conversationId String

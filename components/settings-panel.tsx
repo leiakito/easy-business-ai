@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { DEFAULT_CHAT_SETTINGS, useChatStore } from '@/store/chat.store'
+import { useChatStore } from '@/store/chat.store'
 
 import { ScrollArea } from './ui/scroll-area'
 
@@ -29,10 +29,10 @@ export default function SettingsPanel() {
 
 function SettingsForm() {
   const { id } = useParams<{ id: string }>()
-  const sessions = useChatStore((i) => i.sessions)
+  const sessionsChatSettings = useChatStore((i) => i.sessionsChatSettings)
   const setChatSetting = useChatStore((i) => i.setChatSetting)
   const availableModels = useChatStore((i) => i.models)
-  const chatSetting = sessions[id]?.chatSettings || DEFAULT_CHAT_SETTINGS
+  const chatSetting = sessionsChatSettings[id]
 
   const handleSystemPromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setChatSetting(

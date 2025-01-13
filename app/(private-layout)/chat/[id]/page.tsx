@@ -14,7 +14,7 @@ export default function ChatSpecificPage() {
     id: string
   }>()
 
-  const sessions = useChatStore((i) => i.sessions)
+  const sessions = useChatStore((i) => i.sessionsMessages)
   const addSession = useChatStore((i) => i.addSession)
 
   const getMessages = async () => {

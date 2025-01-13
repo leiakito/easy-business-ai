@@ -80,7 +80,6 @@ export async function updateUserTokenUsage(tokensUsed: number) {
 export async function newChat(id: string) {
   const session = await auth()
   if (!session?.user) redirect('/login')
-
   await prisma.conversation.create({
     data: {
       id,
@@ -94,7 +93,6 @@ export async function createMessage(
 ) {
   const session = await auth()
   if (!session?.user) redirect('/login')
-
   const { conversationId, ...messageData } = data
 
   const createdMessage = await prisma.message.create({
