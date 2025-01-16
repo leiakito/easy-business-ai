@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Balancer from 'react-wrap-balancer'
 
+import { docs } from '@/.velite'
 import { MDXContentRenderer } from '@/components/mdx/mdx-content-renderer'
 import { DashboardTableOfContents } from '@/components/mdx/toc'
 import {
@@ -14,8 +15,6 @@ import { siteConfig } from '@/config/site.config'
 import { absoluteUrl, cn } from '@/lib/utils'
 
 import type { Metadata } from 'next'
-
-import { docs } from '#site/content'
 
 type DocPageProps = {
   slug: string[]
