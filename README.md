@@ -20,6 +20,10 @@ This is a modern, efficient AI chat application built with Next.js 15, showcasin
 
 7. **Theme Support**: Includes both light and dark theme options for enhanced user experience.
 
+8. **MDX Support**: Utilizes MDX for writing documentation and content, allowing for rich, interactive content with embedded React components.
+
+9. **Content Management with Velite**: Integrates Velite for efficient content management, enabling easy creation and organization of documentation and other content.
+
 ## Tech Stack
 
 - Next.js 15
@@ -31,6 +35,7 @@ This is a modern, efficient AI chat application built with Next.js 15, showcasin
 - OpenAI / OpenRouter
 - PostgreSQL
 - Docker
+- Velite
 
 ## Getting Started
 
@@ -111,6 +116,7 @@ The project follows a well-organized structure:
 ```
 
 easy-business-ai/
+├── .velite/
 ├── actions/
 ├── app/
 │ ├── (private)/
@@ -120,6 +126,8 @@ easy-business-ai/
 │ │ └── register/
 │ ├── api/
 │ └── layout.tsx
+├── content/
+│   └── docs/
 ├── components/
 │ ├── ui/
 │ └── [other component folders]
@@ -142,6 +150,7 @@ easy-business-ai/
 ├── package.json
 ├── postcss.config.js
 ├── tailwind.config.ts
+├── velite.config.ts
 └── tsconfig.json
 
 ```
@@ -159,6 +168,10 @@ easy-business-ai/
 - `script/`: Custom scripts for project setup or maintenance.
 - `store/`: State management files (e.g., Redux).
 - `types/`: TypeScript type definitions.
+- `content/`: Contains MDX files for documentation and other content.
+  - `docs/`: MDX files for documentation pages.
+- `.velite/`: Generated Velite output.
+- `velite.config.ts`: Configuration file for Velite content management.
 
 Key configuration files:
 
