@@ -42,8 +42,8 @@ export function NegativeChat() {
       conversationId: chatId,
       messages: []
     })
-    router.push(`/chat/${chatId}`)
     newChat(chatId)
+    router.push(`/chat/${chatId}`)
   }
   return (
     <Button onClick={toChat} variant="link" size="sm">

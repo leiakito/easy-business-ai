@@ -18,7 +18,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "#site/content": ["./.velite"],
+      "#velite": ["./velite.config.ts"]
     },
     "target": "ES2017"
   },

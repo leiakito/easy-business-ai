@@ -38,6 +38,8 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/.next/server ./.next/server
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/content ./content
+COPY --from=builder /app/.velite ./.velite
 
 
 USER nextjs
