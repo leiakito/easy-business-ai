@@ -1,57 +1,56 @@
-import React, { useRef, useEffect } from 'react'
+import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
-interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  minRows?: number
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   maxRows?: number
 }
 
-export const AutoResizeTextarea = React.forwardRef<HTMLTextAreaElement, AutoResizeTextareaProps>(
-  ({ className, minRows = 1, maxRows = 5, ...props }, ref) => {
-    const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, maxRows = 12, value, ...props }, ref) => {
+    const textareaRef = React.useRef<HTMLTextAreaElement | null>(null)
 
-    useEffect(() => {
+    const adjustHeight = React.useCallback(() => {
       const textarea = textareaRef.current
       if (!textarea) return
 
-      const adjustHeight = () => {
+      requestAnimationFrame(() => {
+        const singleLineHeight = parseInt(window.getComputedStyle(textarea).lineHeight, 10)
+        const maxHeight = singleLineHeight * maxRows
+
         textarea.style.height = 'auto'
-        const singleRowHeight = parseInt(window.getComputedStyle(textarea).lineHeight)
-        const desiredHeight = Math.min(
-          Math.max(textarea.scrollHeight, singleRowHeight * minRows),
-          singleRowHeight * maxRows
-        )
-        textarea.style.height = `${desiredHeight}px`
-      }
+        const newHeight = Math.min(textarea.scrollHeight, maxHeight)
+        textarea.style.height = `${newHeight}px`
+        textarea.style.overflowY = textarea.scrollHeight > maxHeight ? 'auto' : 'hidden'
+      })
+    }, [maxRows])
 
-      textarea.addEventListener('input', adjustHeight)
-      adjustHeight() // Initial adjustment
-
-      return () => {
-        textarea.removeEventListener('input', adjustHeight)
-      }
-    }, [minRows, maxRows])
+    React.useEffect(() => {
+      adjustHeight()
+    }, [value, adjustHeight])
 
     return (
       <textarea
+        className={cn(
+          'flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+          className
+        )}
+        autoFocus={false}
         ref={(node) => {
-          textareaRef.current = node
           if (typeof ref === 'function') {
             ref(node)
           } else if (ref) {
             ref.current = node
           }
+          textareaRef.current = node
         }}
-        className={cn(
-          'flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-          className
-        )}
-        rows={minRows}
+        value={value}
         {...props}
       />
     )
   }
 )
 
-AutoResizeTextarea.displayName = 'AutoResizeTextarea'
+Textarea.displayName = 'Textarea'
+
+export { Textarea }

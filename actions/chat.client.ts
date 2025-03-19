@@ -40,6 +40,7 @@ export const useChat = (conversationId: string) => {
     if (!session) {
       addSession({
         conversationId,
+        lastMessageId: null,
         messages: [
           {
             id: useAssistantId,
@@ -66,6 +67,8 @@ export const useChat = (conversationId: string) => {
       tokenCount: 0,
       conversationId: conversationId
     })
+
+    return
 
     getConversationsWithMessages(conversationId)
 
@@ -113,8 +116,7 @@ export const useChat = (conversationId: string) => {
               role: MessageRole.assistant,
               content: textPart
             },
-            conversationId,
-            assistantId
+            conversationId
           )
         })
       }
@@ -147,8 +149,7 @@ export const useChat = (conversationId: string) => {
           role: MessageRole.assistant,
           content: 'An error occurred. Please try again or switch to another model.'
         },
-        conversationId,
-        assistantId
+        conversationId
       )
     }
   }

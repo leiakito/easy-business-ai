@@ -1,58 +1,26 @@
 'use client'
 
-import { useParams } from 'next/navigation'
-
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Select, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useChatStore } from '@/store/chat.store'
 
-import { ScrollArea } from './ui/scroll-area'
+import { Textarea } from './ui/textarea'
 
-export default function SettingsPanel() {
-  return (
-    <Sheet>
-      <SheetTrigger>
-        <span>ChatSettings</span>
-      </SheetTrigger>
-      <SheetContent side="left" className="w-[400px] bg-gray-50 dark:bg-gray-900 sm:w-[540px]">
-        <div className="flex h-full flex-col">
-          <h2 className="mb-6 text-2xl font-bold text-gray-800 dark:text-gray-200">ChatSettings</h2>
-          <ScrollArea className="flex-grow pr-4">
-            <SettingsForm />
-          </ScrollArea>
-        </div>
-      </SheetContent>
-    </Sheet>
-  )
-}
-
-function SettingsForm() {
-  const { id } = useParams<{ id: string }>()
+export function SettingsForm({
+  settings,
+  conversationId
+}: {
+  settings: {
+    systemPrompt: string
+    model: string
+  }
+  conversationId: string
+}) {
   const sessionsChatSettings = useChatStore((i) => i.sessionsChatSettings)
   const setChatSetting = useChatStore((i) => i.setChatSetting)
   const availableModels = useChatStore((i) => i.models)
-  const chatSetting = sessionsChatSettings[id]
 
-  const handleSystemPromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setChatSetting(
-      {
-        ...chatSetting,
-        systemPrompt: e.target.value
-      },
-      id
-    )
-  }
-
-  const handleModelChange = (value: string) => {
-    setChatSetting(
-      {
-        ...chatSetting,
-        model: value
-      },
-      id
-    )
-  }
+  const chatSetting = sessionsChatSettings[conversationId]
 
   const handleTemperatureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.min(Math.max(parseFloat(e.target.value) || 0, 0), 2)
@@ -61,7 +29,7 @@ function SettingsForm() {
         ...chatSetting,
         temperature: value
       },
-      id
+      conversationId
     )
   }
 
@@ -72,7 +40,7 @@ function SettingsForm() {
         ...chatSetting,
         maxTokens: value
       },
-      id
+      conversationId
     )
   }
 
@@ -83,7 +51,7 @@ function SettingsForm() {
         ...chatSetting,
         topP: value
       },
-      id
+      conversationId
     )
   }
 
@@ -94,7 +62,7 @@ function SettingsForm() {
         ...chatSetting,
         frequencyPenalty: value
       },
-      id
+      conversationId
     )
   }
 
@@ -105,9 +73,11 @@ function SettingsForm() {
         ...chatSetting,
         presencePenalty: value
       },
-      id
+      conversationId
     )
   }
+
+  if (!chatSetting) return null
 
   return (
     <div className="space-y-6">
@@ -115,12 +85,13 @@ function SettingsForm() {
         <label htmlFor="systemPrompt" className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
           System Prompt
         </label>
-        <textarea
+        <Textarea
           id="systemPrompt"
-          value={chatSetting.systemPrompt || ''}
-          onChange={handleSystemPromptChange}
+          readOnly
+          value={settings.systemPrompt || ''}
+          disabled
           placeholder="Enter system prompt"
-          rows={18}
+          rows={5}
           className="w-full bg-gray-100 p-3 dark:bg-gray-700"
         />
       </div>
@@ -128,17 +99,11 @@ function SettingsForm() {
         <label htmlFor="model" className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
           Model
         </label>
-        <Select onValueChange={handleModelChange} value={chatSetting.model || ''}>
+        <Select value={settings.model} disabled>
           <SelectTrigger className="w-full bg-gray-100 dark:bg-gray-700">
+            {availableModels.find((i) => i.id === settings.model)?.name}
             <SelectValue placeholder="Select a model" />
           </SelectTrigger>
-          <SelectContent>
-            {availableModels.map((model) => (
-              <SelectItem key={model.id} value={model.id}>
-                {model.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
         </Select>
       </div>
       <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800">

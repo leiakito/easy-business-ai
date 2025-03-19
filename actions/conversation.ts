@@ -12,22 +12,16 @@ export async function deleteConversation(id: string) {
   revalidatePath(`/chat/${id}`)
 }
 
-export async function getConversations() {
+export async function getTool(id: string) {
   const session = await auth()
   if (!session?.user) return null
-  const userId = session.user.id
 
-  const res = await prisma.user.findUnique({
+  const res = await prisma.tool.findUnique({
     where: {
-      id: userId
+      id
     },
     include: {
       conversations: {
-        where: {
-          messages: {
-            some: {}
-          }
-        },
         orderBy: {
           updatedAt: 'desc'
         },
@@ -39,6 +33,7 @@ export async function getConversations() {
             },
             take: 1,
             select: {
+              role: true,
               id: true,
               content: true,
               createdAt: true

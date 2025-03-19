@@ -1,21 +1,62 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 
 import { useChat } from '@/actions/chat.client'
+import { getConversationsWithMessages } from '@/actions/conversation'
 import Submit from '@/components/submit'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AutoResizeTextarea } from '@/components/ui/textarea'
-import { ChatItem, useChatStore } from '@/store/chat.store'
+import { Textarea } from '@/components/ui/textarea'
+import { ChatItem, DEFAULT_CHAT_SETTINGS, useChatStore } from '@/store/chat.store'
 
 type ChatProps = {
-  id: string
+  conversationId: string
+  settings: {
+    systemPrompt: string
+    model: string
+    openingMessage?: string
+  }
+  lastMessageId?: string
 }
 
-export default function Chat({ id }: ChatProps) {
+export default function Chat({ conversationId, settings, lastMessageId }: ChatProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
+
   const sessions = useChatStore((state) => state.sessionsMessages)
-  const messages = sessions[id]?.messages
+  const addSession = useChatStore((i) => i.addSession)
+  const setChatSetting = useChatStore((state) => state.setChatSetting)
+  const sessionsChatSettings = useChatStore((state) => state.sessionsChatSettings)
+  const isInitialized = useChatStore((i) => i.isInitialized)
+
+  const getMessages = useCallback(async () => {
+    const currentSession = sessions[conversationId]
+
+    if (!currentSession) return
+
+    if (lastMessageId && currentSession?.lastMessageId === lastMessageId) {
+      return
+    }
+
+    try {
+      const res = await getConversationsWithMessages(conversationId)
+
+      if (res && res.messages.length > 0) {
+        addSession({
+          conversationId,
+          lastMessageId: res.messages[res.messages.length - 1].id,
+          messages: (res.messages as any) || []
+        })
+      }
+    } catch (error) {
+      console.error('Failed to fetch messages:', error)
+    }
+  }, [addSession, conversationId, lastMessageId, sessions])
+
+  useEffect(() => {
+    if (isInitialized) getMessages()
+  }, [getMessages, isInitialized])
+
+  const messages = sessions[conversationId]?.messages
 
   const scrollToBottom = () => {
     if (scrollRef.current) {
@@ -23,20 +64,26 @@ export default function Chat({ id }: ChatProps) {
     }
   }
 
+  useEffect(() => {
+    if (!sessionsChatSettings[conversationId]) {
+      setChatSetting(
+        { ...DEFAULT_CHAT_SETTINGS, model: settings.model, systemPrompt: settings.systemPrompt },
+        conversationId
+      )
+    }
+  }, [])
+
   return (
-    <div className="flex flex-grow flex-col md:px-20">
+    <>
       <div
         ref={scrollRef}
         className="flex h-0 flex-grow flex-col-reverse items-start gap-4 overflow-y-auto scrollbar-hide md:gap-8"
       >
         <div className="flex-1" />
         {!messages?.length ? (
-          <>
-            <div className="text-xl font-medium text-gray-700 dark:text-gray-200">How can I help you today?</div>
-            <div className="text-gray-600 dark:text-gray-400">
-              LinkAI can make mistakes. Consider checking important information.
-            </div>
-          </>
+          <div className="text-xl font-medium text-gray-700 dark:text-gray-200">
+            {settings.openingMessage ?? 'Welcome to the chat!'}
+          </div>
         ) : (
           messages
             .slice()
@@ -44,8 +91,8 @@ export default function Chat({ id }: ChatProps) {
             .map((message) => <MessageItem key={message.id} message={message} />)
         )}
       </div>
-      <ChatInput id={id} scrollToBottom={scrollToBottom} />
-    </div>
+      <ChatInput id={conversationId} scrollToBottom={scrollToBottom} />
+    </>
   )
 }
 
@@ -115,13 +162,12 @@ function ChatInput({ id, scrollToBottom }: ConversationComponent) {
 
   return (
     <form ref={formRef} action={handleSubmit} className="flex flex-row items-center gap-2 pb-5">
-      <AutoResizeTextarea
+      <Textarea
         ref={inputRef}
         autoComplete="off"
         name="message"
         placeholder="Ask me something..."
         className="min-h-12 resize-none"
-        minRows={1}
         maxRows={5}
         onKeyDown={handleKeyDown}
       />

@@ -44,7 +44,7 @@ type ChatState = {
   sessionsMessages: {
     [conversationId: string]: {
       messages: ChatItem[]
-      lastMessageId?: string
+      lastMessageId: string | null
     }
   }
   sessionsChatSettings: {
@@ -55,13 +55,18 @@ type ChatState = {
 
 type ChatStateActions = {
   setChatSetting: (settings: ChatSettings, conversationId: string) => void
-  addSession: ({ conversationId, messages }: { conversationId: string; messages: ChatItem[] }) => void
+  addSession: ({
+    conversationId,
+    messages
+  }: {
+    conversationId: string
+    messages: ChatItem[]
+    lastMessageId: string | null
+  }) => void
   setModels: (models: Models) => void
-  appendMessage: (chat: ChatItem, conversationId: string, lastMessageId?: string) => void
+  appendMessage: (chat: ChatItem, conversationId: string) => void
   initialize: () => void // New action to set isInitialized to true
 }
-
-const PERSISTED_KEYS: (keyof ChatState)[] = ['sessionsMessages', 'sessionsChatSettings', 'models', 'isInitialized']
 
 export type chatProps = ChatState & ChatStateActions
 
@@ -79,16 +84,16 @@ export const useChatStore = create<chatProps>()(
           models
         })
       },
-      addSession({ conversationId, messages }) {
+      addSession({ conversationId, messages, lastMessageId }) {
         set((state) => {
           state.sessionsMessages[conversationId] = {
             ...state.sessionsMessages[conversationId],
-            messages: messages ?? []
+            messages: messages ?? [],
+            lastMessageId
           }
-          state.sessionsChatSettings[conversationId] = DEFAULT_CHAT_SETTINGS
         })
       },
-      appendMessage(chat, conversationId, lastMessageId) {
+      appendMessage(chat, conversationId) {
         set((state) => {
           const session = state.sessionsMessages[conversationId]
           const messageIndex = session.messages.findIndex((c) => c.id === chat.id)
@@ -98,14 +103,12 @@ export const useChatStore = create<chatProps>()(
           } else {
             session.messages.push(chat)
           }
-          session.lastMessageId = lastMessageId
+          session.lastMessageId = chat.id
         })
       },
       setChatSetting(chatSettings, conversationId) {
         set((state) => {
-          if (state.sessionsChatSettings[conversationId]) {
-            state.sessionsChatSettings[conversationId] = chatSettings
-          }
+          state.sessionsChatSettings[conversationId] = chatSettings
         })
       }
     })),
@@ -117,8 +120,11 @@ export const useChatStore = create<chatProps>()(
           state.initialize()
         }
       },
-      partialize: (state) =>
-        Object.fromEntries(Object.entries(state).filter(([key]) => PERSISTED_KEYS.includes(key as keyof ChatState)))
+      partialize: (state) => ({
+        models: state.models,
+        sessionsChatSettings: state.sessionsChatSettings,
+        sessionsMessages: state.sessionsMessages
+      })
     }
   )
 )
