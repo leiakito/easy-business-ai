@@ -101,7 +101,7 @@ export const useChatStore = create<chatProps>()(
           if (messageIndex !== -1) {
             session.messages[messageIndex].content += chat.content
           } else {
-            session.messages.push(chat)
+            session.messages = [chat, ...session.messages]
           }
           session.lastMessageId = chat.id
         })

@@ -8,8 +8,6 @@ import { useState } from 'react'
 import { newChat } from '@/actions/chat'
 import DeleteConversation from '@/components/conversations/delete-conversation'
 import { SettingsForm } from '@/components/settings-panel'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
@@ -54,10 +52,7 @@ export default function MobileChatMenu({ toolId, conversations, settings, conver
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <MessageSquare className="h-5 w-5" />
-            <span className="sr-only">Chat Menu</span>
-          </Button>
+          <MessageSquare className="h-5 w-5" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={handleNewChat}>
@@ -77,8 +72,8 @@ export default function MobileChatMenu({ toolId, conversations, settings, conver
 
       {/* Conversations Dialog */}
       <Sheet open={isConversationsOpen} onOpenChange={setIsConversationsOpen}>
-        <SheetContent side="left" className="w-[300px] p-0 sm:w-[400px]">
-          <SheetHeader className="border-b px-4 py-3">
+        <SheetContent side="right" className="w-[300px] px-0 sm:w-[400px]">
+          <SheetHeader>
             <SheetTitle>Conversations</SheetTitle>
           </SheetHeader>
 
@@ -125,14 +120,16 @@ export default function MobileChatMenu({ toolId, conversations, settings, conver
         </SheetContent>
       </Sheet>
 
-      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Chat Settings</DialogTitle>
-          </DialogHeader>
-          <SettingsForm conversationId={conversationId} settings={settings} />
-        </DialogContent>
-      </Dialog>
+      <Sheet open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+        <SheetContent side="right" className="w-[300px] px-0 sm:w-[400px]">
+          <SheetHeader>
+            <SheetTitle>Chat Settings</SheetTitle>
+          </SheetHeader>
+          <ScrollArea className="h-[calc(100vh-80px)]">
+            <SettingsForm conversationId={conversationId} settings={settings} />
+          </ScrollArea>
+        </SheetContent>
+      </Sheet>
     </>
   )
 }

@@ -54,32 +54,62 @@ export default async function Navbar({
     >
       <div className="flex w-full flex-row items-center justify-between">
         {children ? children : <NamedLogoWithLink />}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Menu className="h-6 w-6" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="flex flex-col">
-            <DropdownMenuItem className="justify-center">
-              <Link href="/tools">Tools</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <ProfileButton />
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <NegativePricing />
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <NegativeHome />
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <ToggleTheme />
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <SignOut />
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        {rightChildren}
+        {rightChildren ? (
+          <div className="flex items-center gap-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Menu className="h-6 w-6" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="flex flex-col">
+                <DropdownMenuItem className="justify-center">
+                  <Link href="/tools">Tools</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <ProfileButton />
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <NegativePricing />
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <NegativeHome />
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <ToggleTheme />
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <SignOut />
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {rightChildren}
+          </div>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Menu className="h-6 w-6" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="flex flex-col">
+              <DropdownMenuItem className="justify-center">
+                <Link href="/tools">Tools</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <ProfileButton />
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <NegativePricing />
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <NegativeHome />
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <ToggleTheme />
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <SignOut />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </nav>
   )

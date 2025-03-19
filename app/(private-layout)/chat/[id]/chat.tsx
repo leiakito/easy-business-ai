@@ -9,7 +9,6 @@ import remarkHtml from 'remark-html'
 import { useChat } from '@/actions/chat.client'
 import { getConversationsWithMessages } from '@/actions/conversation'
 import Submit from '@/components/submit'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import { ChatItem, DEFAULT_CHAT_SETTINGS, useChatStore } from '@/store/chat.store'
 
@@ -77,19 +76,19 @@ export default function Chat({ conversationId, settings, lastMessageId }: ChatPr
     }
   }, [])
 
+  if (!isInitialized) return
+
   return (
-    <div ref={scrollRef} className="flex h-full flex-col">
-      <div className="relative h-full w-full flex-grow">
-        <div className="absolute left-0 top-0 z-10 flex h-full w-full flex-1 flex-col-reverse gap-4 overflow-y-auto overflow-x-hidden scrollbar-hide md:gap-8">
+    <div className="flex h-full flex-col">
+      <div
+        ref={scrollRef}
+        className="relative h-full w-full flex-grow overflow-x-hidden overflow-y-scroll scrollbar-hide"
+      >
+        <div className="absolute left-0 top-0 z-10 flex h-full w-full flex-1 flex-col-reverse justify-end gap-4 md:gap-8">
           {!messages?.length ? (
-            <div className="text-xl font-medium text-gray-700 dark:text-gray-200">
-              {settings.openingMessage ?? 'Welcome to the chat!'}
-            </div>
+            <div className="text-xl font-medium text-gray-700 dark:text-gray-200">{settings.openingMessage}</div>
           ) : (
-            messages
-              .slice()
-              .reverse()
-              .map((message) => <MessageItem key={message.id} message={message} />)
+            messages.map((message) => <MessageItem key={message.id} message={message} />)
           )}
         </div>
       </div>
@@ -104,8 +103,8 @@ type MessageItemProps = {
 
 function MessageItem({ message }: MessageItemProps) {
   const roleStyles: Record<string, string> = {
-    user: 'prose-slate bg-gray-300 dark:bg-stone-50 ml-auto',
-    assistant: 'prose-stone bg-gray-50 dark:bg-blue-100 mr-auto'
+    user: 'bg-secondary text-secondary-foreground shadow-md ml-auto',
+    assistant: 'bg-primary text-primary-foreground shadow-md mr-auto'
   }
   const isUser = message.role === 'user'
 
@@ -118,17 +117,10 @@ function MessageItem({ message }: MessageItemProps) {
 
   return (
     <div className={`flex w-full flex-col ${isUser ? 'items-end' : 'items-start'}`}>
-      {renderedContent ? (
-        <div
-          dangerouslySetInnerHTML={{ __html: renderedContent }}
-          className={`prose max-w-[90%] rounded-lg p-4 ${roleStyles[message.role]}`}
-        />
-      ) : (
-        <div className="flex w-full flex-col gap-3">
-          <Skeleton className="h-[20px] w-full rounded-md" />
-          <Skeleton className="h-[20px] w-[60%] rounded-md" />
-        </div>
-      )}
+      <div
+        dangerouslySetInnerHTML={{ __html: renderedContent }}
+        className={`prose prose-invert max-w-[90%] rounded-lg px-4 py-2 dark:prose-neutral ${roleStyles[message.role]}`}
+      />
     </div>
   )
 }

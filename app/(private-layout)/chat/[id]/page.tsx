@@ -4,6 +4,7 @@ import { getIsMobile } from '@/lib/mobile'
 
 import Chat from './chat'
 import ChatSidebar from './chat-sidebar'
+import MobileChatMenu from './chat-sidebar.mobile'
 
 export default async function ChatSpecificPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -35,7 +36,17 @@ export default async function ChatSpecificPage({ params }: { params: Promise<{ i
       )}
 
       <div className="flex flex-grow flex-col md:px-20">
-        <Navbar />
+        <Navbar
+          className="mb-2 md:mb-4"
+          rightChildren={
+            <MobileChatMenu
+              conversations={data.conversations}
+              settings={settings}
+              toolId={toolId}
+              conversationId={conversationId}
+            />
+          }
+        />
         <Chat conversationId={conversationId} settings={settings} lastMessageId={lastMessageId} />
       </div>
     </div>

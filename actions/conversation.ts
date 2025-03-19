@@ -52,7 +52,11 @@ export async function getConversationsWithMessages(id: string) {
       id: id
     },
     include: {
-      messages: true
+      messages: {
+        orderBy: {
+          createdAt: 'asc'
+        }
+      }
     }
   })
 
