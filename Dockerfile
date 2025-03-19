@@ -1,6 +1,6 @@
 # syntax=docker.io/docker/dockerfile:1
 
-FROM node:18-alpine AS base
+FROM node:22-alpine AS build
 
 RUN apk add --no-cache \
     libc6-compat \
@@ -8,14 +8,13 @@ RUN apk add --no-cache \
     openssl-dev \
     build-base
 
-RUN npm install -g pnpm
 
 FROM base AS deps
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml prisma ./
 
-RUN pnpm install --frozen-lockfile
+RUN npm install
 
 FROM base AS builder
 WORKDIR /app
@@ -23,7 +22,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN pnpm run build
+RUN npm run build
 
 FROM base AS runner
 WORKDIR /app
@@ -41,6 +40,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/content ./content
 COPY --from=builder /app/.velite ./.velite
 
+RUN npx prisma generate --schema=prisma/schema.prisma
 
 USER nextjs
 
