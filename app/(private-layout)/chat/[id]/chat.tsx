@@ -1,6 +1,10 @@
 'use client'
 
-import { useRef, useEffect, useCallback } from 'react'
+import React, { useRef, useEffect } from 'react'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeSlug from 'rehype-slug'
+import { remark } from 'remark'
+import remarkHtml from 'remark-html'
 
 import { useChat } from '@/actions/chat.client'
 import { getConversationsWithMessages } from '@/actions/conversation'
@@ -28,7 +32,7 @@ export default function Chat({ conversationId, settings, lastMessageId }: ChatPr
   const sessionsChatSettings = useChatStore((state) => state.sessionsChatSettings)
   const isInitialized = useChatStore((i) => i.isInitialized)
 
-  const getMessages = useCallback(async () => {
+  const getMessages = async () => {
     const currentSession = sessions[conversationId]
 
     if (!currentSession) return
@@ -50,11 +54,11 @@ export default function Chat({ conversationId, settings, lastMessageId }: ChatPr
     } catch (error) {
       console.error('Failed to fetch messages:', error)
     }
-  }, [addSession, conversationId, lastMessageId, sessions])
+  }
 
   useEffect(() => {
     if (isInitialized) getMessages()
-  }, [getMessages, isInitialized])
+  }, [isInitialized])
 
   const messages = sessions[conversationId]?.messages
 
@@ -74,25 +78,23 @@ export default function Chat({ conversationId, settings, lastMessageId }: ChatPr
   }, [])
 
   return (
-    <>
-      <div
-        ref={scrollRef}
-        className="flex h-0 flex-grow flex-col-reverse items-start gap-4 overflow-y-auto scrollbar-hide md:gap-8"
-      >
-        <div className="flex-1" />
-        {!messages?.length ? (
-          <div className="text-xl font-medium text-gray-700 dark:text-gray-200">
-            {settings.openingMessage ?? 'Welcome to the chat!'}
-          </div>
-        ) : (
-          messages
-            .slice()
-            .reverse()
-            .map((message) => <MessageItem key={message.id} message={message} />)
-        )}
+    <div ref={scrollRef} className="flex h-full flex-col">
+      <div className="relative h-full w-full flex-grow">
+        <div className="absolute left-0 top-0 z-10 flex h-full w-full flex-1 flex-col-reverse gap-4 overflow-y-auto overflow-x-hidden scrollbar-hide md:gap-8">
+          {!messages?.length ? (
+            <div className="text-xl font-medium text-gray-700 dark:text-gray-200">
+              {settings.openingMessage ?? 'Welcome to the chat!'}
+            </div>
+          ) : (
+            messages
+              .slice()
+              .reverse()
+              .map((message) => <MessageItem key={message.id} message={message} />)
+          )}
+        </div>
       </div>
       <ChatInput id={conversationId} scrollToBottom={scrollToBottom} />
-    </>
+    </div>
   )
 }
 
@@ -102,32 +104,31 @@ type MessageItemProps = {
 
 function MessageItem({ message }: MessageItemProps) {
   const roleStyles: Record<string, string> = {
-    user: 'bg-blue-100 dark:bg-blue-900 ml-auto',
-    assistant: 'bg-green-100 dark:bg-green-900 mr-auto'
+    user: 'prose-slate bg-gray-300 dark:bg-stone-50 ml-auto',
+    assistant: 'prose-stone bg-gray-50 dark:bg-blue-100 mr-auto'
   }
-
   const isUser = message.role === 'user'
+
+  const renderedContent = remark()
+    .use(rehypeSlug)
+    .use(rehypeAutolinkHeadings)
+    .use(remarkHtml)
+    .processSync(message.content)
+    .toString()
 
   return (
     <div className={`flex w-full flex-col ${isUser ? 'items-end' : 'items-start'}`}>
-      <div
-        className={`flex max-w-[90%] flex-col gap-2 rounded-lg p-4 ${roleStyles[message.role]} ${
-          isUser ? '' : 'w-full'
-        }`}
-      >
-        {message.content ? (
-          <p
-            className={`whitespace-pre-wrap text-slate-900 dark:text-slate-300 ${isUser ? 'text-right' : 'text-left'}`}
-          >
-            {message.content}
-          </p>
-        ) : (
-          <div className="flex w-full flex-col gap-3">
-            <Skeleton className="h-[20px] w-full rounded-md" />
-            <Skeleton className="h-[20px] w-[60%] rounded-md" />
-          </div>
-        )}
-      </div>
+      {renderedContent ? (
+        <div
+          dangerouslySetInnerHTML={{ __html: renderedContent }}
+          className={`prose max-w-[90%] rounded-lg p-4 ${roleStyles[message.role]}`}
+        />
+      ) : (
+        <div className="flex w-full flex-col gap-3">
+          <Skeleton className="h-[20px] w-full rounded-md" />
+          <Skeleton className="h-[20px] w-[60%] rounded-md" />
+        </div>
+      )}
     </div>
   )
 }
@@ -161,7 +162,7 @@ function ChatInput({ id, scrollToBottom }: ConversationComponent) {
   }
 
   return (
-    <form ref={formRef} action={handleSubmit} className="flex flex-row items-center gap-2 pb-5">
+    <form ref={formRef} action={handleSubmit} className="flex w-full flex-row items-center gap-2 py-5">
       <Textarea
         ref={inputRef}
         autoComplete="off"

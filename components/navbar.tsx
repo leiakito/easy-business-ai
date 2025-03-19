@@ -12,7 +12,15 @@ import ToggleTheme from './toggle'
 import { buttonVariants } from './ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 
-export default async function Navbar({ children, className }: { children?: React.ReactNode; className?: string }) {
+export default async function Navbar({
+  children,
+  className,
+  rightChildren
+}: {
+  children?: React.ReactNode
+  rightChildren?: React.ReactNode
+  className?: string
+}) {
   const isMobile = await getIsMobile()
 
   if (!isMobile)
@@ -71,6 +79,7 @@ export default async function Navbar({ children, className }: { children?: React
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        {rightChildren}
       </div>
     </nav>
   )

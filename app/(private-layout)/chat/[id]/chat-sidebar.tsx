@@ -50,7 +50,7 @@ export default function ChatSidebar({ toolId, conversations, settings, conversat
   }
 
   return (
-    <div className="flex h-full w-64 flex-col border-r border-border bg-muted/40">
+    <div className="flex h-full w-64 min-w-64 flex-col border-r border-border bg-muted/40">
       <div className="flex items-center justify-between p-4">
         <h2 className="text-lg font-semibold">Chats</h2>
         <Button variant="ghost" size="icon" onClick={handleNewChat} title="New Chat">

@@ -68,8 +68,6 @@ export const useChat = (conversationId: string) => {
       conversationId: conversationId
     })
 
-    return
-
     getConversationsWithMessages(conversationId)
 
     const openrouter = createOpenRouter({
