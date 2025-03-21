@@ -8,12 +8,23 @@ import { auth } from '@/lib/auth'
 import Subscriptions from './subscriptions'
 import { Button, buttonVariants } from './ui/button'
 
-export function ProfileButton() {
+export async function ProfileButton() {
+  const session = await auth()
+
+  if (!session?.user)
+    return (
+      <Link href="/login">
+        <Button variant="link" size="sm">
+          Login
+        </Button>
+      </Link>
+    )
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="link" size="sm">
-          My account
+          My Account
         </Button>
       </DialogTrigger>
       <ProfileContent />

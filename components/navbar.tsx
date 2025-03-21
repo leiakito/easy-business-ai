@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils'
 import { NamedLogoWithLink } from './logo'
 import { NegativeHome, NegativePricing } from './nagative.client'
 import { ProfileButton } from './profile'
-import SignOut from './sign-out'
 import ToggleTheme from './toggle'
 import { buttonVariants } from './ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
@@ -76,9 +75,6 @@ export default async function Navbar({
                 <DropdownMenuItem asChild>
                   <ToggleTheme />
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <SignOut />
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             {rightChildren}
@@ -103,9 +99,6 @@ export default async function Navbar({
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <ToggleTheme />
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <SignOut />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
