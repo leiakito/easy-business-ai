@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { auth } from '@/lib/auth'
 
 import Subscriptions from './subscriptions'
-import { Button, buttonVariants } from './ui/button'
+import { Button } from './ui/button'
 
 export async function ProfileButton() {
   const session = await auth()
@@ -35,25 +35,7 @@ export async function ProfileButton() {
 async function ProfileContent() {
   const session = await auth()
 
-  if (!session?.user) {
-    return (
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Not logged in</DialogTitle>
-          <Link
-            href="/login"
-            className={buttonVariants({
-              variant: 'link',
-              className: 'text-base',
-              size: 'sm'
-            })}
-          >
-            Login
-          </Link>
-        </DialogHeader>
-      </DialogContent>
-    )
-  }
+  if (!session?.user) return null
 
   return (
     <DialogContent>
