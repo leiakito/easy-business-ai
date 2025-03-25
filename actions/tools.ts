@@ -21,18 +21,19 @@ const toolSchema = z.object({
 })
 
 /**
- * Fetch all tools for the current user
+ * Fetch tools based on the specified type
+ * @param type 'my' for user's tools, 'all' for all public tools
  * @returns Array of tools
  */
-export async function fetchTools() {
+export async function fetchTools(type: 'my' | 'all') {
   const session = await auth()
   if (!session?.user) redirect('/login')
 
   try {
+    const where = type === 'my' ? { userId: session.user.id } : { isPublic: true }
+
     const tools = await prisma.tool.findMany({
-      where: {
-        userId: session.user.id
-      },
+      where,
       include: {
         conversations: {
           orderBy: {
@@ -47,13 +48,12 @@ export async function fetchTools() {
       orderBy: { updatedAt: 'desc' }
     })
 
-    // Transform the result to include lastConversationId and lastMessageId
     return tools.map((tool) => {
       const lastConversation = tool.conversations[0]
       return {
         ...tool,
         lastConversationId: lastConversation?.id,
-        conversations: undefined // Remove the conversations array from the result
+        conversations: undefined
       }
     })
   } catch (error) {
