@@ -108,7 +108,6 @@ export async function createMessage(
       }
     })
 
-    console.log('321312')
     return createdMessage
   } catch (error) {
     console.error('Failed to create message:', error)

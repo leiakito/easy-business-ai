@@ -7,7 +7,7 @@ const STORAGE_ID = 'chat' as const
 export const DEFAULT_CHAT_SETTINGS = {
   model: 'cohere/command-r-plus',
   systemPrompt: 'You are an AI assistant. You will be given a task. You must generate a detailed and long answer.',
-  maxTokens: 1000,
+  maxTokens: 4096,
   temperature: 0.7,
   topP: 1,
   frequencyPenalty: 0,
