@@ -1,48 +1,54 @@
-'use client'
-
-import { useParams, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
-
-import { getConversationsWithMessages } from '@/actions/conversation'
-import { useChatStore } from '@/store/chat.store'
+import { getTool } from '@/actions/conversation'
+import Navbar from '@/components/navbar'
+import { getIsMobile } from '@/lib/mobile'
 
 import Chat from './chat'
+import ChatSidebar from './chat-sidebar'
+import MobileChatMenu from './chat-sidebar.mobile'
 
-export default function ChatSpecificPage() {
-  const search = useSearchParams()
-  const { id } = useParams<{
-    id: string
-  }>()
+export default async function ChatSpecificPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const isMobile = await getIsMobile()
 
-  const sessions = useChatStore((i) => i.sessionsMessages)
-  const addSession = useChatStore((i) => i.addSession)
+  const toolId = id.split('-')[0]
+  const conversationId = id.split('-')[1]
 
-  const getMessages = async () => {
-    const lastMessageId = search.get('lastMessageId')
-    const currentSession = sessions[id]
+  const data = await getTool(toolId)
 
-    if (!currentSession) return
+  if (!data) return null
 
-    if (lastMessageId && currentSession?.lastMessageId === lastMessageId) {
-      return
-    }
-
-    try {
-      const res = await getConversationsWithMessages(id)
-      if (res) {
-        addSession({
-          conversationId: id,
-          messages: (res.messages as any) || []
-        })
-      }
-    } catch (error) {
-      console.error('Failed to fetch messages:', error)
-    }
+  const lastMessageId = data.conversations.find((i) => i.id === conversationId)?.messages[0]?.id
+  const settings = data.settings as {
+    systemPrompt: string
+    model: string
+    openingMessage?: string
   }
 
-  useEffect(() => {
-    getMessages()
-  }, [])
+  return (
+    <div className="flex h-screen px-4 md:px-0">
+      {!isMobile && (
+        <ChatSidebar
+          conversations={data.conversations}
+          settings={settings}
+          toolId={toolId}
+          conversationId={conversationId}
+        />
+      )}
 
-  return <Chat id={id} />
+      <div className="flex flex-grow flex-col md:px-20">
+        <Navbar
+          className="mb-2 md:mb-4"
+          rightChildren={
+            <MobileChatMenu
+              conversations={data.conversations}
+              settings={settings}
+              toolId={toolId}
+              conversationId={conversationId}
+            />
+          }
+        />
+        <Chat conversationId={conversationId} settings={settings} lastMessageId={lastMessageId} />
+      </div>
+    </div>
+  )
 }

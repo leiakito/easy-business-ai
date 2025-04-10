@@ -77,15 +77,18 @@ export async function updateUserTokenUsage(tokensUsed: number) {
   return updatedSubscription
 }
 
-export async function newChat(id: string) {
+export async function newChat(id: string, toolId: string) {
   const session = await auth()
   if (!session?.user) redirect('/login')
+
   await prisma.conversation.create({
     data: {
       id,
-      userId: session.user.id!
+      toolId: toolId
     }
   })
+
+  redirect(`/chat/${toolId}-${id}`)
 }
 
 export async function createMessage(
@@ -95,16 +98,22 @@ export async function createMessage(
   if (!session?.user) redirect('/login')
   const { conversationId, ...messageData } = data
 
-  const createdMessage = await prisma.message.create({
-    data: {
-      ...messageData,
-      conversation: {
-        connect: { id: conversationId }
+  try {
+    const createdMessage = await prisma.message.create({
+      data: {
+        ...messageData,
+        conversation: {
+          connect: { id: conversationId }
+        }
       }
-    }
-  })
+    })
 
-  return createdMessage
+    console.log('321312')
+    return createdMessage
+  } catch (error) {
+    console.error('Failed to create message:', error)
+    throw new Error('Failed to create message')
+  }
 }
 
 export async function saveSettings(userId: string, settings: ChatSettings) {

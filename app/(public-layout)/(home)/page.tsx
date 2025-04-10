@@ -2,40 +2,16 @@
 
 import { motion } from 'framer-motion'
 import { Code, Cpu, Globe } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 
-import { newChat } from '@/actions/chat'
 import { buttonVariants } from '@/components/ui/button'
-import { generateRandomId } from '@/lib/utils'
-import { useChatStore } from '@/store/chat.store'
 
 export default function Home() {
-  const session = useSession()
-  const router = useRouter()
-  const addSession = useChatStore((i) => i.addSession)
-
   const features = [
     { icon: <Code size={40} />, text: 'Advanced AI Programming' },
     { icon: <Cpu size={40} />, text: 'Machine Learning Integration' },
     { icon: <Globe size={40} />, text: 'Natural Language Processing' }
   ]
-
-  function toChat() {
-    let url = ''
-    if (session.status === 'authenticated') {
-      const chatId = generateRandomId(24)
-      url = `/chat/${chatId}`
-      addSession({
-        conversationId: chatId,
-        messages: []
-      })
-      newChat(chatId)
-    } else {
-      url = '/login'
-    }
-    router.push(url)
-  }
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-12 sm:px-6 lg:px-8">
@@ -89,8 +65,8 @@ export default function Home() {
         transition={{ delay: 1.2, duration: 0.5 }}
         className="z-10"
       >
-        <div
-          onClick={toChat}
+        <Link
+          href={'/tools'}
           className={buttonVariants({
             size: 'lg',
             className:
@@ -98,7 +74,7 @@ export default function Home() {
           })}
         >
           Get started
-        </div>
+        </Link>
       </motion.div>
     </div>
   )
