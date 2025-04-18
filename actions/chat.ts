@@ -1,7 +1,6 @@
 'use server'
 
 import { Prisma } from '@prisma/client'
-import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { OPEN_ROUTER_API_KEY } from '@/constant/config'
@@ -71,8 +70,6 @@ export async function updateUserTokenUsage(tokensUsed: number) {
   if (updatedSubscription.usedTokens > updatedSubscription.totalTokens) {
     console.warn(`User ${session.user.id} has exceeded their token limit`)
   }
-
-  revalidatePath('/chat', 'layout')
 
   return updatedSubscription
 }
