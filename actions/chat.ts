@@ -1,7 +1,6 @@
 'use server'
 
 import { Prisma } from '@prisma/client'
-import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { OPEN_ROUTER_API_KEY } from '@/constant/config'
@@ -72,8 +71,6 @@ export async function updateUserTokenUsage(tokensUsed: number) {
     console.warn(`User ${session.user.id} has exceeded their token limit`)
   }
 
-  revalidatePath('/chat', 'layout')
-
   return updatedSubscription
 }
 
@@ -108,7 +105,6 @@ export async function createMessage(
       }
     })
 
-    console.log('321312')
     return createdMessage
   } catch (error) {
     console.error('Failed to create message:', error)

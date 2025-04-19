@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 import { remark } from 'remark'
@@ -8,6 +8,7 @@ import remarkHtml from 'remark-html'
 
 import { useChat } from '@/actions/chat.client'
 import { getConversationsWithMessages } from '@/actions/conversation'
+import { CopyButton } from '@/components/mdx/copy-button'
 import Submit from '@/components/submit'
 import { Textarea } from '@/components/ui/textarea'
 import { ChatItem, DEFAULT_CHAT_SETTINGS, useChatStore } from '@/store/chat.store'
@@ -86,7 +87,15 @@ export default function Chat({ conversationId, settings, lastMessageId }: ChatPr
       >
         <div className="absolute left-0 top-0 z-10 flex h-full w-full flex-1 flex-col-reverse justify-end gap-4 md:gap-8">
           {!messages?.length ? (
-            <div className="text-xl font-medium text-gray-700 dark:text-gray-200">{settings.openingMessage}</div>
+            <div className="text-xl font-medium text-gray-700 dark:text-gray-200">
+              <MessageItem
+                message={{
+                  id: 'firstMessage',
+                  role: 'assistant',
+                  content: settings.openingMessage ?? 'Welcome to the chat! Type your message to begin.'
+                }}
+              />
+            </div>
           ) : (
             messages.map((message) => <MessageItem key={message.id} message={message} />)
           )}
@@ -106,6 +115,8 @@ function MessageItem({ message }: MessageItemProps) {
     user: 'bg-secondary text-secondary-foreground shadow-md ml-auto',
     assistant: 'bg-primary text-primary-foreground shadow-md mr-auto'
   }
+  const [isHovered, setIsHovered] = useState(false)
+
   const isUser = message.role === 'user'
 
   const renderedContent = remark()
@@ -116,11 +127,20 @@ function MessageItem({ message }: MessageItemProps) {
     .toString()
 
   return (
-    <div className={`flex w-full flex-col ${isUser ? 'items-end' : 'items-start'}`}>
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`relative w-fit ${isUser ? 'self-end' : 'self-start'}`}
+    >
       <div
         dangerouslySetInnerHTML={{ __html: renderedContent }}
-        className={`prose prose-invert max-w-[90%] rounded-lg px-4 py-2 dark:prose-neutral ${roleStyles[message.role]}`}
+        className={`prose prose-invert rounded-lg px-4 py-2 dark:prose-neutral ${roleStyles[message.role]}`}
       />
+      <div
+        className={`absolute right-2 top-2 transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+      >
+        <CopyButton>{message.content}</CopyButton>
+      </div>
     </div>
   )
 }
